@@ -10,6 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Automation_Laboratory_Backend.Models;
+using Automation_Laboratory_Backend.Repositories;
+using Automation_Laboratory_Backend.Services;
+using Microsoft.CodeAnalysis.Host;
 
 namespace Automation_Laboratory_Backend
 {
@@ -25,7 +31,19 @@ namespace Automation_Laboratory_Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IDeviceRepository, DeviceRepository>();
+            services.AddScoped<IDeviceService, DeviceService>();
+
+            services.AddDbContext<AutomationlaboratorydbContext>(option =>
+            {
+                option.UseSqlServer(Configuration.GetConnectionString("LocalPersonConnectionString"));
+            });
+
             services.AddControllers();
+
+            services.AddMvc().AddNewtonsoftJson(json => json.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
