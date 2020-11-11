@@ -34,6 +34,9 @@ namespace Automation_Laboratory_Backend
             services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddScoped<IDeviceService, DeviceService>();
 
+            services.AddScoped<IWorkplaceRepository, WorkplaceRepository>();
+            services.AddScoped<IWorkplaceService, WorkplaceService>();
+
             services.AddDbContext<AutomationlaboratorydbContext>(option =>
             {
                 option.UseSqlServer(Configuration.GetConnectionString("LocalPersonConnectionString"));
