@@ -35,6 +35,20 @@ namespace Automation_Laboratory_Backend.Repositories
             return certainDevice;
         }
 
+        public Device SetStatusFalse(Device device)
+        {
+            _automationlaboratorydbContext.Devices.Update(device);
+            _automationlaboratorydbContext.SaveChanges();
+            return device;
+        }
+
+        public Device SetStatusTrue(Device device)
+        {
+            _automationlaboratorydbContext.Devices.Update(device);
+            _automationlaboratorydbContext.SaveChanges();
+            return device;
+        }
+
         public Device Update(Device device)
         {
             _automationlaboratorydbContext.Devices.Update(device);

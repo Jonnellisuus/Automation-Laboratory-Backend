@@ -50,8 +50,7 @@ namespace Automation_Laboratory_Backend.Models
         public string CounterIn { get; set; }
         [StringLength(50)]
         public string CounterOut { get; set; }
-        [StringLength(50)]
-        public string IsActive { get; set; }
+        public bool IsActive { get; set; }
 
         [ForeignKey(nameof(WorkplaceId))]
         [InverseProperty("Devices")]

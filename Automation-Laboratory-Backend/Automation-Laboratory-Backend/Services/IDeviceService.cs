@@ -12,5 +12,7 @@ namespace Automation_Laboratory_Backend.Services
         List<Device> Read();
         Device Read(int deviceId);
         Device Update(Device device);
+        Device SetStatusFalse(int deviceId);
+        Device SetStatusTrue(int deviceId);
     }
 }

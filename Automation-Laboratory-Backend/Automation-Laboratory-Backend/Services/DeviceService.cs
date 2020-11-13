@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Automation_Laboratory_Backend.Models;
+﻿using Automation_Laboratory_Backend.Models;
 using Automation_Laboratory_Backend.Repositories;
+using System.Collections.Generic;
 
 namespace Automation_Laboratory_Backend.Services
 {
@@ -28,6 +25,20 @@ namespace Automation_Laboratory_Backend.Services
         public Device Read(int deviceId)
         {
             return _deviceRepository.Read(deviceId);
+        }
+
+        public Device SetStatusFalse(int deviceId)
+        {
+            var device = Read(deviceId);
+            device.IsActive = false;
+            return _deviceRepository.SetStatusFalse(device);
+        }
+
+        public Device SetStatusTrue(int deviceId)
+        {
+            var device = Read(deviceId);
+            device.IsActive = true;
+            return _deviceRepository.SetStatusTrue(device);
         }
 
         public Device Update(Device device)

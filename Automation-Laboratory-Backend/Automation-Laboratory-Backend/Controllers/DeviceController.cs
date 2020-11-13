@@ -58,9 +58,19 @@ namespace Automation_Laboratory_Backend.Controllers
         }
 
         // DELETE api/<DeviceController>/5
+        // This is will not delete any information.
+        // Instead it will change device's IsActive status to false.
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _deviceService.SetStatusFalse(id);
+        }
+
+        // This will change device's IsActive status to true.
+        [HttpPatch("{id}")]
+        public void Patch(int id)
+        {
+            _deviceService.SetStatusTrue(id);
         }
     }
 }
