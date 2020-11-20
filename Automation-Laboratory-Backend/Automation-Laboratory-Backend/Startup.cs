@@ -39,7 +39,7 @@ namespace Automation_Laboratory_Backend
 
             services.AddDbContext<AutomationlaboratorydbContext>(option =>
             {
-                option.UseSqlServer(Configuration.GetConnectionString("LocalPersonConnectionString"));
+                option.UseSqlServer(Configuration.GetConnectionString("AzureConnectionString"));
             });
 
             services.AddControllers();
