@@ -75,11 +75,11 @@ namespace Automation_Laboratory_Backend
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
+            app.UseRouting();
             app.UseCors("AutomationLaboratoryPolicy");
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseHttpsRedirection();
-            app.UseRouting();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
