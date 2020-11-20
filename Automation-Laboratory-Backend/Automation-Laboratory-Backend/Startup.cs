@@ -16,6 +16,7 @@ using Automation_Laboratory_Backend.Models;
 using Automation_Laboratory_Backend.Repositories;
 using Automation_Laboratory_Backend.Services;
 using Microsoft.CodeAnalysis.Host;
+using Microsoft.AspNetCore.Http;
 
 namespace Automation_Laboratory_Backend
 {
@@ -37,6 +38,13 @@ namespace Automation_Laboratory_Backend
             services.AddScoped<IWorkplaceRepository, WorkplaceRepository>();
             services.AddScoped<IWorkplaceService, WorkplaceService>();
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
             services.AddDbContext<AutomationlaboratorydbContext>(option =>
             {
                 option.UseSqlServer(Configuration.GetConnectionString("AzureConnectionString"));
@@ -45,6 +53,16 @@ namespace Automation_Laboratory_Backend
             services.AddControllers();
 
             services.AddMvc().AddNewtonsoftJson(json => json.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            // CORS policy starts here.
+
+            services.AddCors(options => options.AddPolicy("AutomationLaboratoryPolicy",
+                builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                }));
+
+            // CORS policy stops here.
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
@@ -57,10 +75,11 @@ namespace Automation_Laboratory_Backend
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("AutomationLaboratoryPolicy");
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
