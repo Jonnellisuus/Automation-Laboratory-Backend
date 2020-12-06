@@ -10,6 +10,7 @@ namespace Automation_Laboratory_Backend.Repositories
     {
         Device Create(Device device);
         List<Device> Read();
+        List<Device> ReadIsActiveFalse();
         Device Read(int deviceId);
         Device Update(Device device);
         Device SetStatusFalse(Device device);

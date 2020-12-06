@@ -22,6 +22,11 @@ namespace Automation_Laboratory_Backend.Services
             return _deviceRepository.Read();
         }
 
+        public List<Device> ReadIsActiveFalse()
+        {
+            return _deviceRepository.ReadIsActiveFalse();
+        }
+
         public Device Read(int deviceId)
         {
             return _deviceRepository.Read(deviceId);

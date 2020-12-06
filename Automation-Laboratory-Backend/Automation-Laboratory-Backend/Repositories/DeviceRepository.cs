@@ -23,10 +23,22 @@ namespace Automation_Laboratory_Backend.Repositories
             return device;
         }
 
+        // The code below will get all the devices which isActive value is true.
         public List<Device> Read()
         {
-            var everyDevice = _automationlaboratorydbContext.Devices.ToList();
+            var everyDevice = _automationlaboratorydbContext.Devices
+                .Where(e => e.IsActive == true)
+                .ToList();
             return everyDevice;
+        }
+
+        // The code below will get all the devices which isActive value is false.
+        public List<Device> ReadIsActiveFalse()
+        {
+            var everyDeviceFalse = _automationlaboratorydbContext.Devices
+                .Where(e => e.IsActive == false)
+                .ToList();
+            return everyDeviceFalse;
         }
 
         public Device Read(int deviceId)

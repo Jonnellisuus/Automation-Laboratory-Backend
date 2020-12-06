@@ -26,11 +26,20 @@ namespace Automation_Laboratory_Backend.Controllers
         }
 
         // GET: api/<DeviceController>
+        // The code below will get all the devices which isActive value is true.
         [HttpGet]
         public IActionResult Get()
         {
             var everyDevice = _deviceRepository.Read();
             return new JsonResult(everyDevice);
+        }
+
+        // The code below will get all the devices which isActive value is false.
+        [HttpGet("DeviceActiveFalse")]
+        public IActionResult GetIsActiveFalse()
+        {
+            var everyDeviceFalse = _deviceRepository.ReadIsActiveFalse();
+            return new JsonResult(everyDeviceFalse);
         }
 
         // GET api/<DeviceController>/5
