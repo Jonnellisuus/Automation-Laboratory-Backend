@@ -21,8 +21,6 @@ namespace Automation_Laboratory_Backend.Models
         [Key]
         public long Id { get; set; }
         [StringLength(50)]
-        public string Name { get; set; }
-        [StringLength(50)]
         public string DeviceCode { get; set; }
         [StringLength(50)]
         public string Versio { get; set; }
@@ -31,7 +29,7 @@ namespace Automation_Laboratory_Backend.Models
         [StringLength(50)]
         public string BootUp { get; set; }
         [StringLength(50)]
-        public string Firmware { get; set; }
+        public string Article { get; set; }
         [StringLength(50)]
         public string MAC { get; set; }
         [StringLength(50)]

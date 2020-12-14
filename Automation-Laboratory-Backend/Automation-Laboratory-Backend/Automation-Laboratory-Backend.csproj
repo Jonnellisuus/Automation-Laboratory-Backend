@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Automation_Laboratory_Backend</RootNamespace>
+    <UserSecretsId>96dd0321-284c-4e8f-a1bf-399454e905e6</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
