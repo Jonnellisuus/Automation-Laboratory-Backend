@@ -50,5 +50,11 @@ namespace Automation_Laboratory_Backend.Services
         {
             return _deviceRepository.Update(device);
         }
+
+        public void Delete(int deviceId)
+        {
+            Device deleteDevice = _deviceRepository.Read(deviceId);
+            _deviceRepository.Delete(deleteDevice);
+        }
     }
 }

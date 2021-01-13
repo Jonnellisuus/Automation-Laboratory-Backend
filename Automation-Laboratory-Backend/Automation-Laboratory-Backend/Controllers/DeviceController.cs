@@ -27,7 +27,7 @@ namespace Automation_Laboratory_Backend.Controllers
 
         // GET: api/<DeviceController>
         // The code below will get all the devices which isActive value is true.
-        [HttpGet]
+        [HttpGet] // api/device
         public IActionResult Get()
         {
             var everyDevice = _deviceRepository.Read();
@@ -35,7 +35,7 @@ namespace Automation_Laboratory_Backend.Controllers
         }
 
         // The code below will get all the devices which isActive value is false.
-        [HttpGet("DeviceActiveFalse")]
+        [HttpGet("DeviceActiveFalse")] // api/device/DeviceActiveFalse
         public IActionResult GetIsActiveFalse()
         {
             var everyDeviceFalse = _deviceRepository.ReadIsActiveFalse();
@@ -80,6 +80,15 @@ namespace Automation_Laboratory_Backend.Controllers
         public void Patch(int id)
         {
             _deviceService.SetStatusTrue(id);
+        }
+
+
+        // This is will delete all the information about certain device.
+        // Once this method has been executed no information can be recovered.
+        [HttpDelete("DeviceActiveFalse/{id}")]
+        public void DeletePermanently(int id)
+        {
+            _deviceService.Delete(id);
         }
     }
 }

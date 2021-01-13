@@ -15,5 +15,6 @@ namespace Automation_Laboratory_Backend.Services
         Device Update(Device device);
         Device SetStatusFalse(int deviceId);
         Device SetStatusTrue(int deviceId);
+        void Delete(int deviceId);
     }
 }

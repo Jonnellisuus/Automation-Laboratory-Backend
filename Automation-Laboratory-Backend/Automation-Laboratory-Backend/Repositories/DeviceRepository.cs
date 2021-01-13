@@ -67,5 +67,11 @@ namespace Automation_Laboratory_Backend.Repositories
             _automationlaboratorydbContext.SaveChanges();
             return device;
         }
+
+        public void Delete(Device device)
+        {
+            _automationlaboratorydbContext.Devices.Remove(device);
+            _automationlaboratorydbContext.SaveChanges();
+        }
     }
 }

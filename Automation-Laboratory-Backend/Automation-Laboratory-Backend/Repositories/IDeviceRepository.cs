@@ -15,5 +15,6 @@ namespace Automation_Laboratory_Backend.Repositories
         Device Update(Device device);
         Device SetStatusFalse(Device device);
         Device SetStatusTrue(Device device);
+        void Delete(Device device);
     }
 }
