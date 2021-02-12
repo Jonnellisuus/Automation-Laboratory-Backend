@@ -17,21 +17,34 @@ using Automation_Laboratory_Backend.Repositories;
 using Automation_Laboratory_Backend.Services;
 using Microsoft.CodeAnalysis.Host;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.IO;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace Automation_Laboratory_Backend
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            HostingEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment HostingEnvironment { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSpaStaticFiles(config =>
+            {
+                config.RootPath = "wwwroot";
+            });
+
             services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddScoped<IDeviceService, DeviceService>();
 
@@ -49,6 +62,31 @@ namespace Automation_Laboratory_Backend
             {
                 option.UseSqlServer(Configuration.GetConnectionString("AzureConnectionString"));
             });
+
+            var pathToKey = Path.Combine(Directory.GetCurrentDirectory(), "keys", "firebase_admin_sdk.json");
+
+            if (HostingEnvironment.IsEnvironment("local"))
+                pathToKey = Path.Combine(Directory.GetCurrentDirectory(), "keys", "firebase_admin_sdk.local.json");
+
+            FirebaseApp.Create(new AppOptions
+            {
+                Credential = GoogleCredential.FromFile(pathToKey)
+            });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    var firebaseProjectName = Configuration["konekortit"];
+                    options.Authority = "https://securetoken.google.com/" + firebaseProjectName;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = "https://securetoken.google.com/" + firebaseProjectName,
+                        ValidateAudience = true,
+                        ValidAudience = firebaseProjectName,
+                        ValidateLifetime = true
+                    };
+                });
 
             services.AddControllers();
 
@@ -77,7 +115,10 @@ namespace Automation_Laboratory_Backend
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
             app.UseCors("AutomationLaboratoryPolicy");
+            app.UseAuthentication();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthorization();
@@ -85,6 +126,17 @@ namespace Automation_Laboratory_Backend
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "client-app";
+                if (env.IsDevelopment() || env.IsEnvironment("local"))
+                {
+                    var startScript = env.IsEnvironment("local") ? "start-local" : "start";
+                    spa.UseAngularCliServer(npmScript: startScript);
+                }
+
             });
         }
     }

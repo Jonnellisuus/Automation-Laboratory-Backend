@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Automation_Laboratory_Backend.Models;
 using Automation_Laboratory_Backend.Repositories;
 using Automation_Laboratory_Backend.Services;
+using Microsoft.AspNetCore.Authorization;
+using FirebaseAdmin;
+using FirebaseAndAngular.Web.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,6 +26,25 @@ namespace Automation_Laboratory_Backend.Controllers
         {
             _deviceRepository = deviceRepository;
             _deviceService = deviceService;
+        }
+
+        [HttpPost("verify")]
+        public async Task<IActionResult> VerifyToken(TokenVerifyRequest request)
+        {
+            var auth = FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance;
+
+            try
+            {
+                var response = await auth.VerifyIdTokenAsync(request.Token);
+                if (response != null)
+                    return Accepted();
+            }
+            catch (FirebaseException ex)
+            {
+                return BadRequest();
+            }
+
+            return BadRequest();
         }
 
         // GET: api/<DeviceController>
@@ -52,6 +74,7 @@ namespace Automation_Laboratory_Backend.Controllers
 
         // POST api/<DeviceController>
         [HttpPost]
+        [Authorize]
         public IActionResult Post([FromBody] Device device)
         {
             var createDevice = _deviceService.Create(device);
@@ -60,6 +83,7 @@ namespace Automation_Laboratory_Backend.Controllers
 
         // PUT api/<DeviceController>/5
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult Put([FromBody] Device device)
         {
             var updateDevice = _deviceService.Update(device);
@@ -70,6 +94,7 @@ namespace Automation_Laboratory_Backend.Controllers
         // This is will not delete any information.
         // Instead it will change device's IsActive status to false.
         [HttpDelete("{id}")]
+        [Authorize]
         public void Delete(int id)
         {
             _deviceService.SetStatusFalse(id);
@@ -77,15 +102,16 @@ namespace Automation_Laboratory_Backend.Controllers
 
         // This will change device's IsActive status to true.
         [HttpPatch("{id}")]
+        [Authorize]
         public void Patch(int id)
         {
             _deviceService.SetStatusTrue(id);
         }
 
-
         // This is will delete all the information about certain device.
         // Once this method has been executed no information can be recovered.
         [HttpDelete("DeviceActiveFalse/{id}")]
+        [Authorize]
         public void DeletePermanently(int id)
         {
             _deviceService.Delete(id);
